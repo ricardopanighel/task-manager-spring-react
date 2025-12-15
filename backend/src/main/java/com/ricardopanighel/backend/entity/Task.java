@@ -10,8 +10,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  // Unique identifier
 
+    @Column(length = 100, nullable = false)
     private String title;    // Task title
+
+    @Column(length = 500, nullable = true)
     private String description; // Task description
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean completed;  // status
 
     // Empty constructor necessary to JPA
@@ -38,7 +43,7 @@ public class Task {
     }
 
     public String getDescription(){
-        return descriptions;
+        return description;
     }
 
     public void setDescription(String description){
