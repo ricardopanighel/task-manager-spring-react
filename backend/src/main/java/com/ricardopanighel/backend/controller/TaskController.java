@@ -3,8 +3,10 @@ package com.ricardopanighel.backend.controller;
 import com.ricardopanighel.backend.controller.request.TaskRequest;
 import com.ricardopanighel.backend.controller.response.TaskResponse;
 import com.ricardopanighel.backend.entity.Task;
+import com.ricardopanighel.backend.exception.TaskNotFoundException;
 import com.ricardopanighel.backend.mapper.TaskMapper;
 import com.ricardopanighel.backend.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +38,7 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
         Task task = taskService.findTaskById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found."));
+                .orElseThrow(() -> new TaskNotFoundException("Task with id" + id + "not found."));
 
         TaskResponse taskResponse = TaskMapper.toTaskResponse(task);
 
@@ -44,7 +46,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest request) {
+    public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest request) {
         Task newTask = TaskMapper.toTask(request);
         Task savedTask = taskService.saveTask(newTask);
         TaskResponse taskResponse = TaskMapper.toTaskResponse(savedTask);
@@ -53,7 +55,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody TaskRequest requestDetails) {
+    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequest requestDetails) {
         Task task = taskService.findTaskById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found."));
 

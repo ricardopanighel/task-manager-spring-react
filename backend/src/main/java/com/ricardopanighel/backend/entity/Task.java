@@ -1,6 +1,9 @@
 package com.ricardopanighel.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 
 @Entity
 @Table(name = "tasks") // PostgreSQL table name
@@ -50,7 +53,7 @@ public class Task {
         this.description = description;
     }
 
-    public Boolean isCompleted(){
+    public boolean isCompleted(){
         return completed;
     }
 
